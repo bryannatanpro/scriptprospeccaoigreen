@@ -1,0 +1,696 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Guia de Prospecção — Licenciados iGreen</title>
+  <link rel="apple-touch-icon" sizes="180x180" href="../FORMS/logoigreen.png.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Prospecção iGreen">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f0f2f5;
+      color: #2d3748;
+      min-height: 100vh;
+    }
+
+    /* ── HEADER ── */
+    header {
+      background: linear-gradient(135deg, #003d1a 0%, #005c28 60%, #00A651 100%);
+      color: white;
+      padding: 36px 24px 28px;
+      text-align: center;
+    }
+    header .logo {
+      font-size: 10px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: #a0d8b8;
+      margin-bottom: 8px;
+    }
+    header h1 { font-size: 24px; font-weight: 700; }
+    header h1 span { color: #4ade80; }
+    header p {
+      margin-top: 8px;
+      font-size: 12.5px;
+      color: #a0d8b8;
+      max-width: 440px;
+      margin-left: auto;
+      margin-right: auto;
+      line-height: 1.5;
+    }
+
+    /* ── TABS ── */
+    .tabs {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      background: #005c28;
+      padding: 0 24px 18px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .tabs::-webkit-scrollbar { display: none; }
+    .tab-btn {
+      padding: 9px 22px;
+      border: none;
+      border-radius: 30px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .tab-btn.prospeccao { background: #00A651; color: white; }
+    .tab-btn.dicas      { background: #6b46c1; color: white; }
+    .tab-btn.followup   { background: #2c7a7b; color: white; }
+    .tab-btn.active, .tab-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 14px rgba(0,0,0,0.35);
+      filter: brightness(1.18);
+    }
+
+    /* ── LAYOUT ── */
+    .content {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 24px 12px 60px;
+    }
+    .panel { display: none; }
+    .panel.active { display: block; }
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 17px;
+      font-weight: 700;
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid #e2e8f0;
+    }
+    .section-title .badge {
+      font-size: 10px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .prospeccao .badge { background: #c6f6d5; color: #276749; }
+
+    /* ── AVISO TOPO ── */
+    .aviso-topo {
+      background: #f0fff4;
+      border: 1px solid #9ae6b4;
+      border-radius: 10px;
+      padding: 13px 15px;
+      font-size: 12.5px;
+      color: #22543d;
+      margin-bottom: 20px;
+      line-height: 1.5;
+    }
+    .aviso-topo strong.titulo { display: block; margin-bottom: 4px; font-size: 13px; }
+
+    .dicas-gerais {
+      background: #faf5ff;
+      border: 1px solid #d6bcfa;
+      border-radius: 10px;
+      padding: 10px 14px;
+      margin-bottom: 20px;
+      line-height: 1.4;
+      font-size: 12px;
+      color: #44337a;
+    }
+    .dicas-gerais strong.titulo { display: block; margin-bottom: 6px; font-size: 12.5px; color: #553c9a; }
+    .dicas-gerais ul { padding-left: 16px; display: flex; flex-direction: column; gap: 2px; }
+    .dicas-gerais ul li::marker { color: #805ad5; }
+
+    /* ── CHAT WRAPPER ── */
+    .chat-wrap {
+      background: #fafafa;
+      border: 1px solid #dbdbdb;
+      border-radius: 12px;
+      padding: 16px 12px;
+      margin-bottom: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    /* ── BUBBLE ROW ── */
+    .bubble-row {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 2px;
+    }
+    .bubble-row.right { align-items: flex-end; }
+    .bubble-row.left  { align-items: flex-start; }
+
+    .bubble-label {
+      font-size: 9.5px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 3px;
+      padding: 0 6px;
+    }
+    .bubble-row.right .bubble-label { color: #276749; text-align: right; }
+    .bubble-row.left  .bubble-label { color: #2b6cb0; }
+
+    .bubble {
+      max-width: 82%;
+      padding: 9px 13px 8px;
+      border-radius: 10px;
+      font-size: 13.5px;
+      line-height: 1.55;
+      white-space: pre-wrap;
+      word-break: break-word;
+      position: relative;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.10);
+    }
+
+    .bubble-row.right .bubble {
+      background: #dcf5e4;
+      color: #1a1a1a;
+      border-radius: 18px 4px 18px 18px;
+    }
+    .bubble-row.right .bubble::after {
+      content: '';
+      position: absolute;
+      top: 0; right: -8px;
+      border-width: 8px 0 0 8px;
+      border-style: solid;
+      border-color: #dcf5e4 transparent;
+    }
+
+    .bubble-row.left .bubble {
+      background: #ffffff;
+      color: #1a1a1a;
+      border-radius: 4px 18px 18px 18px;
+      border: 1px solid #efefef;
+    }
+    .bubble-row.left .bubble::after {
+      content: '';
+      position: absolute;
+      top: 0; left: -8px;
+      border-width: 8px 8px 0 0;
+      border-style: solid;
+      border-color: #ffffff transparent;
+    }
+
+    /* Botão copiar */
+    .copy-btn {
+      margin-top: 7px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 11px;
+      border: 1px solid #00A651;
+      background: transparent;
+      color: #00A651;
+      border-radius: 6px;
+      font-size: 10.5px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s;
+      align-self: flex-end;
+    }
+    .copy-btn:hover { background: #00A651; color: white; border-color: #00A651; }
+    .copy-btn.copied { background: #005c28; border-color: #005c28; color: white; }
+
+    /* ── AGUARDAR RESPOSTA ── */
+    .wait-card {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 7px 16px;
+      margin: 8px auto 10px;
+      background: #6b46c1;
+      border: none;
+      border-radius: 20px;
+      font-size: 10px;
+      font-weight: 700;
+      color: #ffffff;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      width: fit-content;
+    }
+
+    /* ── DICA / ATENÇÃO ── */
+    .dica-card {
+      background: #fffbeb;
+      border-left: 4px solid #f6e05e;
+      border-radius: 0 8px 8px 0;
+      padding: 10px 14px;
+      margin: 6px 0 10px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+    }
+    .dica-card .dica-label {
+      font-size: 9.5px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #975a16;
+      margin-bottom: 4px;
+    }
+    .dica-card .dica-text {
+      font-size: 12px;
+      line-height: 1.5;
+      color: #744210;
+    }
+    .dica-card.atencao {
+      background: #fff5f5;
+      border-left-color: #fc8181;
+    }
+    .dica-card.atencao .dica-label { color: #c53030; }
+    .dica-card.atencao .dica-text  { color: #742a2a; }
+
+    /* ── DIVIDER ── */
+    .divider {
+      height: 1px;
+      background: #cbd5e0;
+      margin: 18px 0;
+      opacity: 0.6;
+    }
+
+    /* ── RAMIFICAÇÃO ── */
+    .branch-tag-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 12px 0 8px;
+    }
+    .branch-tag-row::before, .branch-tag-row::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: #cbd5e0;
+    }
+    .branch-tag {
+      font-size: 10px;
+      font-weight: 700;
+      padding: 3px 12px;
+      border-radius: 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      white-space: nowrap;
+    }
+    .tag-sim { background: #c6f6d5; color: #276749; }
+    .tag-nao { background: #fed7d7; color: #9b2c2c; }
+
+    /* ── ETAPA ── */
+    .etapa-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #005c28;
+      background: #c6f6d5;
+      padding: 4px 12px;
+      border-radius: 20px;
+      margin-bottom: 10px;
+    }
+
+    /* ── TOAST ── */
+    #toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: #00A651;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      opacity: 0;
+      transition: all 0.3s;
+      z-index: 999;
+    }
+    #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    @media (max-width: 480px) {
+      header { padding: 24px 16px 20px; }
+      header h1 { font-size: 19px; }
+      header p { font-size: 12px; }
+      .tabs {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+        padding: 0 12px 16px;
+        overflow-x: unset;
+      }
+      .tab-btn { padding: 10px 8px; font-size: 12px; border-radius: 12px; text-align: center; }
+      .content { padding: 16px 10px 60px; }
+      .section-title { font-size: 15px; }
+      .bubble { max-width: 92%; font-size: 13px; }
+      .bubble-label { font-size: 9px; }
+      .dica-card { padding: 8px 12px; }
+      .dica-card .dica-text { font-size: 11.5px; }
+      .aviso-topo { font-size: 12px; padding: 11px 13px; }
+      .copy-btn { font-size: 10px; padding: 4px 9px; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo">Guia de Prospecção</div>
+  <h1><span>iGreen</span> Energy</h1>
+  <p>Script completo de prospecção de licenciados via Direct do Instagram. Clique em <strong>Copiar</strong> para copiar cada mensagem.</p>
+</header>
+
+<div class="tabs">
+  <button class="tab-btn prospeccao active" onclick="showTab('prospeccao')">⚡ Prospecção</button>
+  <button class="tab-btn dicas" onclick="showTab('dicas')">💡 Dicas</button>
+  <button class="tab-btn followup" onclick="showTab('followup')">🔁 Follow-up</button>
+</div>
+
+<div class="content">
+
+  <!-- ===================== DICAS ===================== -->
+  <div id="panel-dicas" class="panel">
+    <div class="dicas-gerais" style="margin-bottom:0">
+      <strong class="titulo">💡 Dicas gerais de prospecção</strong>
+      <ul>
+        <li>Você <strong>não precisa seguir o script 100%</strong> — adapte com suas palavras e seu jeito natural de falar.</li>
+        <li><strong>Sempre chame a pessoa pelo nome</strong> — personaliza a abordagem e cria proximidade desde o início.</li>
+        <li><strong>Responda rápido</strong> — quanto mais demorar para responder, menor a chance de engajamento.</li>
+        <li><strong>Uma pergunta por vez</strong> — não envie várias perguntas juntas numa mesma mensagem.</li>
+        <li>Fique à vontade para <strong>enviar áudios</strong> — humaniza a conversa e gera mais conexão.</li>
+        <li><strong>Evite mandar links logo de início</strong> — isso encerra a conversa antes de criar conexão.</li>
+        <li>O <strong>objetivo principal</strong> é sempre <strong>agendar uma reunião ou call</strong> com o prospecto.</li>
+        <li><strong>Demonstre entusiasmo, mas sem pressão</strong> — o tom deve ser de quem quer ajudar, não de quem precisa vender.</li>
+        <li>Se a pessoa sumir, <strong>faça follow-up</strong> — espere 1 dia e retome a conversa.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ===================== FOLLOW-UP ===================== -->
+  <div id="panel-followup" class="panel">
+
+    <div class="section-title" style="border-color:#81e6d9">
+      Mensagens de Follow-up
+      <span class="badge" style="background:#b2f5ea;color:#234e52">Follow-up</span>
+    </div>
+
+    <div class="aviso-topo" style="background:#e6fffa;border-color:#81e6d9;color:#234e52">
+      <strong class="titulo">⚡ Quando usar o follow-up?</strong>
+      Quando a pessoa para de responder durante ou após a abordagem. Use as mensagens abaixo conforme o tempo decorrido — sempre <strong>uma mensagem por vez</strong>, nunca em sequência no mesmo dia.
+    </div>
+
+    <!-- BLOCO 1 -->
+    <div class="dica-card" style="background:#e6fffa;border-color:#4fd1c5;margin-bottom:10px">
+      <div class="dica-label" style="color:#234e52">📍 Situação 1 — Sumiu no meio da conversa</div>
+      <div class="dica-text" style="color:#285e61">A pessoa estava respondendo e parou. Use no dia seguinte.</div>
+    </div>
+
+    <div class="chat-wrap">
+      <div class="bubble-row right">
+        <div class="bubble" id="fu-1a">Oi NOME! Tudo bem? Vi que a gente ficou no meio da nossa conversa — podemos continuar? 😊</div>
+        <button class="copy-btn" onclick="copiar('fu-1a', this)">📋 Copiar</button>
+      </div>
+    </div>
+
+    <div class="dica-card">
+      <div class="dica-label">💡 Dica</div>
+      <div class="dica-text">Se ainda não responder, aguarde mais 2 dias e tente uma abordagem diferente — com curiosidade, não com cobrança.</div>
+    </div>
+
+    <div class="chat-wrap">
+      <div class="bubble-row right">
+        <div class="bubble" id="fu-1b">Oi NOME! Sei que a rotina é corrida... só passando pra deixar a porta aberta caso queira retomar nossa conversa quando tiver um tempinho ⚡</div>
+        <button class="copy-btn" onclick="copiar('fu-1b', this)">📋 Copiar</button>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- BLOCO 2 -->
+    <div class="dica-card" style="background:#e6fffa;border-color:#4fd1c5;margin-bottom:10px">
+      <div class="dica-label" style="color:#234e52">📍 Situação 2 — Demonstrou interesse mas não agendou</div>
+      <div class="dica-text" style="color:#285e61">A pessoa gostou da ideia, disse que ia pensar, mas sumiu sem confirmar a reunião.</div>
+    </div>
+
+    <div class="chat-wrap">
+      <div class="bubble-row right">
+        <div class="bubble" id="fu-2a">Oi NOME! Lembrei de você porque acabei de ajudar um licenciado novo aqui a fechar o primeiro contrato essa semana 🌱
+
+Ainda tenho um horário disponível essa semana pra conversar melhor. O que acha?</div>
+        <button class="copy-btn" onclick="copiar('fu-2a', this)">📋 Copiar</button>
+      </div>
+    </div>
+
+    <div class="chat-wrap">
+      <div class="bubble-row right">
+        <div class="bubble" id="fu-2b">Oi NOME! Queria só confirmar — ainda faz sentido a gente marcar aquela conversa ou o momento mudou pra você? Pode falar à vontade, sem compromisso 😊</div>
+        <button class="copy-btn" onclick="copiar('fu-2b', this)">📋 Copiar</button>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- BLOCO 3 -->
+    <div class="dica-card" style="background:#e6fffa;border-color:#4fd1c5;margin-bottom:10px">
+      <div class="dica-label" style="color:#234e52">📍 Situação 3 — Lead frio (mais de 1 semana sem resposta)</div>
+      <div class="dica-text" style="color:#285e61">A pessoa não responde há mais de 7 dias. Última tentativa de reativação.</div>
+    </div>
+
+    <div class="chat-wrap">
+      <div class="bubble-row right">
+        <div class="bubble" id="fu-3a">Oi NOME! Faz um tempinho que não nos falamos 😊
+
+Só queria saber se você ainda tem interesse em conhecer a oportunidade da iGreen ou se o momento não é mais esse — pode falar à vontade, sem compromisso nenhum!</div>
+        <button class="copy-btn" onclick="copiar('fu-3a', this)">📋 Copiar</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ===================== PROSPECÇÃO ===================== -->
+  <div id="panel-prospeccao" class="panel active">
+
+    <div class="section-title prospeccao">
+      Sequência de Prospecção — Direct Instagram
+      <span class="badge">Licenciados</span>
+    </div>
+
+<div class="chat-wrap">
+      <div class="bubble-row right">
+        <div class="bubble" id="p-1">Olá, NOME! Tudo bem? 😊</div>
+        <button class="copy-btn" onclick="copiar('p-1', this)">📋 Copiar</button>
+      </div>
+    </div>
+
+    <div class="wait-card">⏳ Aguardar resposta</div>
+
+    <div class="chat-wrap">
+      <div class="bubble-row right">
+        <div class="bubble" id="p-2">Vi que você tem se posicionado fortemente como um licenciado da iGreen aqui no Instagram e resolvi te chamar por que ando conversando com outros licenciados que tem um conteúdo bom assim como o seu...</div>
+        <button class="copy-btn" onclick="copiar('p-2', this)">📋 Copiar</button>
+      </div>
+      <div class="bubble-row right">
+        <div class="bubble" id="p-3">Posso te perguntar algo referente a sua estratégia aqui do Insta?</div>
+        <button class="copy-btn" onclick="copiar('p-3', this)">📋 Copiar</button>
+      </div>
+    </div>
+
+    <div class="wait-card">⏳ Aguardar resposta</div>
+
+    <div class="divider"></div>
+
+    <div class="chat-wrap">
+      <div class="bubble-row right">
+        <div class="bubble" id="p-4">Ótimoo! Hoje a maior parte dos seus clientes tem vindo de indicações, mutirões presenciais ou por aqui mesmo NOME?</div>
+        <button class="copy-btn" onclick="copiar('p-4', this)">📋 Copiar</button>
+      </div>
+    </div>
+
+    <div class="wait-card">⏳ Aguardar resposta</div>
+
+    <div class="chat-wrap">
+      <div class="bubble-row right">
+        <div class="bubble" id="p-5">Perfeito!</div>
+        <button class="copy-btn" onclick="copiar('p-5', this)">📋 Copiar</button>
+      </div>
+      <div class="bubble-row right">
+        <div class="bubble" id="p-6">Pergunto isso porque há mais de 4 anos trabalho com anúncios para o mkt de relacionamento e recentemente começamos a atender alguns licenciados Igreen, como a @eulaisamelo, por exemplo.</div>
+        <button class="copy-btn" onclick="copiar('p-6', this)">📋 Copiar</button>
+      </div>
+      <div class="bubble-row right">
+        <div class="bubble" id="p-7">E estou bem entusiasmado com o modelo da Igreen⚡, porque é um produto que tem um potencial enorme de crescimento para os licenciados.</div>
+        <button class="copy-btn" onclick="copiar('p-7', this)">📋 Copiar</button>
+      </div>
+      <div class="bubble-row right">
+        <div class="bubble" id="p-8">Como o cliente final não precisa investir nada inicialmente, se torna um produto que gera muito volume, algo que os licenciados precisam pra crescer...</div>
+        <button class="copy-btn" onclick="copiar('p-8', this)">📋 Copiar</button>
+      </div>
+      <div class="bubble-row right">
+        <div class="bubble" id="p-9">Você também enxerga dessa forma NOME?</div>
+        <button class="copy-btn" onclick="copiar('p-9', this)">📋 Copiar</button>
+      </div>
+    </div>
+
+    <div class="wait-card">⏳ Aguardar resposta</div>
+
+    <div class="divider"></div>
+
+    <div class="chat-wrap">
+      <div class="bubble-row right">
+        <div class="bubble" id="p-10">Legal! e por essa necessidade de volume de clientes, eu comecei a aplicar o meu método de anúncios para gerar esses leads para os licenciados...</div>
+        <button class="copy-btn" onclick="copiar('p-10', this)">📋 Copiar</button>
+      </div>
+      <div class="bubble-row right">
+        <div class="bubble" id="p-11">Inclusive, para você entender melhor como funciona NOME, vou te mostrar um exemplo da estrutura que usamos aqui abaixo⬇️</div>
+        <button class="copy-btn" onclick="copiar('p-11', this)">📋 Copiar</button>
+      </div>
+      <div class="bubble-row right">
+        <div class="bubble" id="p-13">O processo é bem simples...
+
+Produzimos os anúncios e enviamos os leads para esse forms do link abaixo, que recebe diariamente pessoas interessadas em economizar na conta de luz…
+
+A pessoa faz a simulação da economia e já envia a foto da conta de energia diretamente para o whatsapp do licenciado.</div>
+        <button class="copy-btn" onclick="copiar('p-13', this)">📋 Copiar</button>
+      </div>
+      <div class="bubble-row right">
+        <div class="bubble" id="p-12">https://bryannatanpro.github.io/formsigreen/</div>
+        <button class="copy-btn" onclick="copiar('p-12', this)">📋 Copiar</button>
+      </div>
+      <div class="bubble-row right">
+        <div class="bubble" id="p-12b">Me diz o que acha desse exemplo NOME⚡</div>
+        <button class="copy-btn" onclick="copiar('p-12b', this)">📋 Copiar</button>
+      </div>
+    </div>
+
+    <div class="wait-card">⏳ Aguardar resposta</div>
+
+    <div class="divider"></div>
+
+    <div class="chat-wrap">
+      <div class="bubble-row right">
+        <div class="bubble" id="p-14">Legal.</div>
+        <button class="copy-btn" onclick="copiar('p-14', this)">📋 Copiar</button>
+      </div>
+      <div class="bubble-row right">
+        <div class="bubble" id="p-15">O que tenho visto é que muitos licenciados dependem de mutirões e gastos com deslocamentos e visitas para gerar esse volume.</div>
+        <button class="copy-btn" onclick="copiar('p-15', this)">📋 Copiar</button>
+      </div>
+      <div class="bubble-row right">
+        <div class="bubble" id="p-16">Sendo que com os anúncios certos, conseguimos apresentar a igreen para milhares de pessoas da mesma região sem que o licenciado precise sair de casa.</div>
+        <button class="copy-btn" onclick="copiar('p-16', this)">📋 Copiar</button>
+      </div>
+      <div class="bubble-row right">
+        <div class="bubble" id="p-17">Para aplicar tudo isso, existe um investimento mínimo de R$17 por dia que pode gerar de 4 a 6 simulações de conta de energia diariamente pra vc.</div>
+        <button class="copy-btn" onclick="copiar('p-17', this)">📋 Copiar</button>
+      </div>
+      <div class="bubble-row right">
+        <div class="bubble" id="p-18">Esse investimento para ter esses resultados, é algo que vc tem procurado hoje NOME?</div>
+        <button class="copy-btn" onclick="copiar('p-18', this)">📋 Copiar</button>
+      </div>
+    </div>
+
+    <div class="wait-card">⏳ Aguardar resposta</div>
+
+    <div class="divider"></div>
+
+    <div class="branch-tag-row">
+      <span class="branch-tag tag-sim">✅ Se a resposta for SIM</span>
+    </div>
+
+    <div class="chat-wrap">
+      <div class="bubble-row right">
+        <div class="bubble" id="p-sim1">Perfeito, para eu te explicar melhor como funcionaria esses anúncios e te apresentar de forma prática como aplicamos eles para alguns licenciados.</div>
+        <button class="copy-btn" onclick="copiar('p-sim1', this)">📋 Copiar</button>
+      </div>
+      <div class="bubble-row right">
+        <div class="bubble" id="p-sim2">Seria interessante agendarmos uma reunião online, são cerca de 30 minutos pra eu te apresentar toda nossa estatégia.</div>
+        <button class="copy-btn" onclick="copiar('p-sim2', this)">📋 Copiar</button>
+      </div>
+      <div class="bubble-row right">
+        <div class="bubble" id="p-sim3">Você tem disponibilide pra conversar hoje sobre?</div>
+        <button class="copy-btn" onclick="copiar('p-sim3', this)">📋 Copiar</button>
+      </div>
+    </div>
+
+    <div class="branch-tag-row">
+      <span class="branch-tag tag-nao">❌ Se a resposta for NÃO</span>
+    </div>
+
+    <div class="chat-wrap">
+      <div class="bubble-row right">
+        <div class="bubble" id="p-nao">Sem problemas.
+
+Só para eu entender melhor, qual seria o principal motivo de você acreditar que isso não faria sentido neste momento?</div>
+        <button class="copy-btn" onclick="copiar('p-nao', this)">📋 Copiar</button>
+      </div>
+    </div>
+
+    <div class="wait-card">⏳ Aguardar resposta e trabalhar a objeção</div>
+
+  </div>
+  <!-- fim painel prospecção -->
+
+</div>
+
+<div id="toast">✅ Mensagem copiada!</div>
+
+<script>
+  function showTab(tab) {
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('panel-' + tab).classList.add('active');
+    document.querySelector('.tab-btn.' + tab).classList.add('active');
+  }
+
+  function copiar(id, btn) {
+    const text = document.getElementById(id).innerText;
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(text).then(() => sucesso(btn)).catch(() => fallback(text, btn));
+    } else {
+      fallback(text, btn);
+    }
+  }
+
+  function fallback(text, btn) {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.setAttribute('readonly', '');
+    ta.style.cssText = 'position:fixed;top:0;left:0;width:1px;height:1px;padding:0;border:none;outline:none;opacity:0;';
+    document.body.appendChild(ta);
+    ta.focus();
+    ta.select();
+    ta.setSelectionRange(0, 99999);
+    try { document.execCommand('copy'); sucesso(btn); } catch(e) {}
+    document.body.removeChild(ta);
+  }
+
+  function sucesso(btn) {
+    btn.textContent = '✅ Copiado!';
+    btn.classList.add('copied');
+    showToast();
+    setTimeout(() => {
+      btn.textContent = '📋 Copiar';
+      btn.classList.remove('copied');
+    }, 2000);
+  }
+
+  function showToast() {
+    const t = document.getElementById('toast');
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2000);
+  }
+</script>
+
+</body>
+</html>
